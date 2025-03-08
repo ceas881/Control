@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Acceso</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Iniciar Sesión</h1>
+    <form id="loginForm">
+      <label for="usernameOemail">Nombre o Correo:</label>
+      <input type="text" id="usernameOemail" name="usernameOemail" required>
+
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div id="resultado"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

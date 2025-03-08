@@ -8,6 +8,14 @@
         <servlet-name>Controladorp</servlet-name>
         <servlet-class>Controlador.Controladorp</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Cotrolador2</servlet-name>
+        <servlet-class>Controlador.Cotrolador2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HIngreso</servlet-name>
+        <servlet-class>Controlador.HIngreso</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
         <url-pattern>/Controlador</url-pattern>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>Controladorp</servlet-name>
         <url-pattern>/Controladorp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cotrolador2</servlet-name>
+        <url-pattern>/Cotrolador2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HIngreso</servlet-name>
+        <url-pattern>/HIngreso</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
