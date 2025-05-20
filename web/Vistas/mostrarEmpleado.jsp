@@ -7,6 +7,7 @@
 <%@page import="ModeloDAO.ConsultaDAO"%>
 <%@page import="Modelo.Consultae"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<link href="css/styles.css" rel="stylesheet" type="text/css"/>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -16,7 +17,7 @@
         <title>Empleado</title>
     </head>
     <body>
-        <div>
+        <div class="containerB">
             <script src="script.js"></script>
             <%
                 ConsultaDAO consultaDAO = new ConsultaDAO();

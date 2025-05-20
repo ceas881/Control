@@ -24,17 +24,12 @@
             </a>
             <br>
             <br>
-            <!--a class="btn2" href="HIngreso?accion=Registrar_Salida">
-                <h2>Registrar Produccion</h2>
-            </a>
-            <br>
-            <br-->
-            <a class="btn2" href="Controladorp?accion=listar">
+            <a class="btn2" href="login.jsp?redirect=productos">
                 <h2>Listar Productos</h2>
             </a>
             <br>
             <br>
-            <a class="btn2" href="Controlador?accion=Listar">
+            <a class="btn2" href="login.jsp?redirect=empleados">
                 <h2>Listar Empleados</h2>
             </a>
         </div>

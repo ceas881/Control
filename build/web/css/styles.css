@@ -238,3 +238,16 @@ footer {
 .sidebar ul li a:hover {
     background-color: #575757; /* Color de fondo al pasar el mouse */
 }
+.container5 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+table {
+    border-collapse: collapse;
+    margin: 10px;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+}

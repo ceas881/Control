@@ -11,6 +11,7 @@ public class Consultae {
     private String fecha;
     private String hora_ingreso;
     private String hora_salida;
+    private String actualizarHoraSalida;
 
     public Consultae() {
         

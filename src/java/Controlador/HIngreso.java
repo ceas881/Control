@@ -1,21 +1,18 @@
 package Controlador;
 
 import Modelo.Consultae;
-import Modelo.Producto;
 import ModeloDAO.ConsultaDAO;
 import ModeloDAO.RegistroDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -50,9 +47,15 @@ public class HIngreso extends HttpServlet {
         String accion = request.getParameter("accion");
 
         // Verificar si 'accion' es nulo para evitar errores
-        if (accion == null) {
-            accion = "";
-        }
+        if (accion == null) accion = "";
+        
+        // 🔐 Verificación de sesión activa
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("authenticated") == null) {
+        response.sendRedirect("login.jsp?redirect=" + accion);
+        return;
+    }
+        
         System.out.println("Acción recibida: " + accion); // Debug para ver qué acción llega
 
         if (accion != null && accion.equals("Consultas")) {
@@ -60,6 +63,22 @@ public class HIngreso extends HttpServlet {
             request.getRequestDispatcher("Vistas/Consulta.jsp").forward(request, response);
             return;  // Evita continuar ejecutando más código
         }
+        
+        /*String dni = request.getParameter("dni");
+        //String accion = request.getParameter("accion");
+
+        if (accion.equals("Consulta")) { //por validar para verificar documento ingresado--------------------------------------
+        // Verificar en la BD si el DNI existe
+        boolean existeDNI = verificardniEnBD(dni); // Método hipotético que verifica en la BD
+    
+        if (existeDNI) {
+        // Redirigir al siguiente módulo
+        request.getRequestDispatcher("Vistas/mostrarEmpleados.jsp").forward(request, response);
+        } else {
+        // Redirigir de vuelta al formulario con mensaje de error
+        request.setAttribute("error", "El DNI ingresado no existe.");
+        request.getRequestDispatcher("Vistas/consulta.jsp").forward(request, response);
+        }*/
 
         if (accion != null && accion.equals("Consulta")) {
             // Redirigir a mostrarEmpleado.jsp
@@ -94,50 +113,30 @@ public class HIngreso extends HttpServlet {
             String dni = request.getParameter("dni");
             ConsultaDAO dao = new ConsultaDAO();
             dao.Agregar(dni);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("Vistas/Consulta.jsp").forward(request, response);
             /*response.sendRedirect("mostrarEmpleado.jsp?mensaje=Nuevo registro exitoso para DNI: " + dni);*/
             return;  // Evita continuar ejecutando más código
         }
 
         if (accion.equalsIgnoreCase("Registrar Salida")) {
-            System.out.println("Ejecutando acción: Registrar Salida"); // Debug
-
-            // Obtener lista de productos para el desplegable
-            RegistroDAO dao = new RegistroDAO();
-            List<Producto> listaProductos = dao.listarProductos();
-
-            // Verificar que la lista tiene productos
-            System.out.println("Total productos enviados al JSP: " + listaProductos.size());
-
-            // Enviar la lista de productos a la vista
-            request.setAttribute("listaProductos", listaProductos);
-
-            // Redirigir al JSP
-            request.getRequestDispatcher("Vistas/registrar_salida.jsp").forward(request, response);
-            return; // Importante para evitar que continúe ejecutando código innecesario
-        }
-
-        if (accion.equalsIgnoreCase("Guardar Salida")) {
-            System.out.println("Ejecutando acción: Guardar Salida"); // Debug
-
+            //System.out.println("Ejecutando acción: Registrar Salida"); // Debug
             String dni = request.getParameter("dni");
-            int producto_id = Integer.parseInt(request.getParameter("producto"));
-            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-
-            System.out.println("Datos recibidos -> DNI: " + dni + ", Producto: " + producto_id + ", Cantidad: " + cantidad); // Debug
-
-            // Registrar salida y actualizar inventario
-            RegistroDAO dao = new RegistroDAO();
-            dao.registrarSalida(dni, producto_id, cantidad);
-            acceso = "HIngreso?accion=Listar";
-
-            // Redirigir a la vista de histórico
-            request.getRequestDispatcher(acceso).forward(request, response);
-            return; // Importante para evitar que se ejecute más código
-        }
+            ConsultaDAO dao = new ConsultaDAO(); // <-- Instanciación del DAO
+            dao.actualizarHoraSalida(dni); // Actualizas la hora de salida
+            request.setAttribute("productos", dao.obtenerProductos()); // Lista productos para el form
+            acceso = "Vistas/registrar_salida.jsp"; // Redirige al JSP para seleccionar producto
+              
+            } else if(accion.equalsIgnoreCase("GuardarSalida")){
+                int codigo = Integer.parseInt(request.getParameter("codigo"));
+                int cantidad = Integer.parseInt(request.getParameter("cantidad"));
+                RegistroDAO dao = new RegistroDAO();
+                dao.actualizarInventario(codigo, cantidad);
+                acceso = "Vistas/Consulta.jsp"; // o donde desees enviar
+            }
 
         // Si no se encontró ninguna acción válida, redirigir a la página principal
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        RequestDispatcher vista = request.getRequestDispatcher(acceso);
+        vista.forward(request, response);
     }
 
     @Override
@@ -149,5 +148,9 @@ public class HIngreso extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean verificardniEnBD(String dni) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

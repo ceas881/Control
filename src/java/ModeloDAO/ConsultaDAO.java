@@ -1,7 +1,6 @@
 package ModeloDAO;
 
 import Config.Conexion;
-import Interfaces.CRUD;
 import Interfaces.CRUDI;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -98,7 +97,39 @@ public class ConsultaDAO implements CRUDI {
             System.out.println("Error al agregar (ConsultaDAO) en método Agregar: " + e);
         }
     }
-
+    public void actualizarHoraSalida(String dni) {
+    String sql = "UPDATE registro_ingreso_salida SET hora_salida = CURTIME() " +
+                 "WHERE dni = ? AND hora_salida IS NULL ORDER BY id_registro DESC LIMIT 1";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, dni);
+        ps.executeUpdate();
+        System.out.println("Hora de salida actualizada para DNI: " + dni);
+    } catch (SQLException e) {
+        System.out.println("Error al actualizar hora de salida: " + e);
+    }
+}
+    public List<Producto> obtenerProductos() {
+    List<Producto> lista = new ArrayList<>();
+    String sql = "SELECT * FROM registro_producto";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Producto p = new Producto();
+            p.setcodigo(rs.getInt("codigo"));
+            p.setnombre(rs.getString("nombre"));
+            p.setinventario(rs.getInt("inventario"));
+            lista.add(p);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener productos: " + e);
+    }
+    return lista;
+}
+    
     @Override
     public boolean Consulta(Consultae Consultae) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

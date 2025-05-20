@@ -46,8 +46,38 @@ public class RegistroDAO {
         }
         return false;
     }
+    public List<Producto> obtenerProductos() {
+    List<Producto> lista = new ArrayList<>();
+    String sql = "SELECT * FROM registro_producto";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            Producto p = new Producto();
+            p.setcodigo(rs.getInt("codigo"));
+            p.setnombre(rs.getString("nombre"));
+            p.setinventario(rs.getInt("inventario"));
+            lista.add(p);
+        }
+    } catch (Exception e) {
+        System.out.println("Error obteniendo productos: " + e);
+    }
+    return lista;
+}
+    public void actualizarHoraSalida(String dni){
+    String sql = "UPDATE registro_ingreso_salida SET hora_salida = CURTIME() WHERE dni = ? AND hora_salida IS NULL ORDER BY id_registro DESC LIMIT 1";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setString(1, dni);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error al registrar hora de salida: " + e);
+    }
+}
 
-    public void registrarSalida(String dni, int producto_id, int cantidad) {
+    /*public void registrarSalida(String dni, int producto_id, int cantidad) {
     // Consultas SQL
     String sqlInsert = "INSERT INTO historial_movimientos (dni, fecha, hora_salida, producto_id, cantidad) "
             + "VALUES (?, CURDATE(), CURTIME(), ?, ?)";
@@ -104,8 +134,19 @@ public class RegistroDAO {
             e.printStackTrace();
         }
     }
+}*/
+    public void actualizarInventario(int codigo, int cantidad) {
+    String sql = "UPDATE registro_producto SET inventario = inventario + ? WHERE codigo = ?";
+    try {
+        con = cn.getConnection();
+        ps = con.prepareStatement(sql);
+        ps.setInt(1, cantidad);
+        ps.setInt(2, codigo);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Error actualizando inventario: " + e);
+    }
 }
-
 
 
     public List<Producto> listarProductos() {

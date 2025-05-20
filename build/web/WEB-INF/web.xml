@@ -16,6 +16,10 @@
         <servlet-name>HIngreso</servlet-name>
         <servlet-class>Controlador.HIngreso</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AuthController</servlet-name>
+        <servlet-class>Controlador.AuthController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
         <url-pattern>/Controlador</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>HIngreso</servlet-name>
         <url-pattern>/HIngreso</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AuthController</servlet-name>
+        <url-pattern>/AuthController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
